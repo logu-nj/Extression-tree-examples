@@ -48,7 +48,16 @@ public class Program
         var ageMethod = typeof(Person).GetMethod("setAge");
 
         var nameBind = Expression.Bind(nameMember, Expression.Constant("Logu")); // using PropertyInfo
+        var ageBind = Expression.Bind(ageMethod, Expression.Constant(22)); // using MethodInfo
+        
+        var constructor = typeof(Person).GetConstructor(Type.EmptyTypes);
+        var newExpr = Expression.New(constructor); // for creting new object
 
+        var initExpr = Expression.MemberInit(newExpr, nameBind, ageBind);
+
+        var personObj = Expression.Lambda<Func<Person>>(initExpr).Compile()();
+
+        Console.WriteLine("${personObj.Name}, ${personObj.Age}");
     }
 
     public static void Main(String[] arg)
@@ -56,5 +65,6 @@ public class Program
         Console.WriteLine(AddExpression(10, 20));
         Console.WriteLine(isTrue(true));
         AssignCheck();
+        BindValue();
     }
 }
