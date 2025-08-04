@@ -1,8 +1,9 @@
 ﻿
 using System.Linq.Expressions;
+using System.Reflection;
 public class Person
 {
-    public string Name { get; set; }
+    public string Name { get; set; } = "";
     public int Age { get; set; }
     public void setAge(int age){
         Age = age;
@@ -44,23 +45,23 @@ public class Program
     public static void BindValue()
     {
         // Property: Name
-        var nameMember = typeof(Person).GetProperty("Name");
-        var ageMethod = typeof(Person).GetMethod("setAge");
+        PropertyInfo MemberName = typeof(Person).GetProperty("Name")!;
+        MethodInfo AgeMethod = typeof(Person).GetProperty("Age")!.GetSetMethod()!;
 
-        var nameBind = Expression.Bind(nameMember, Expression.Constant("Logu")); // using PropertyInfo
-        var ageBind = Expression.Bind(ageMethod, Expression.Constant(22)); // using MethodInfo
+        var nameBind = Expression.Bind(MemberName!, Expression.Constant("Logu")); // using PropertyInfo
+        var ageBind = Expression.Bind(AgeMethod!, Expression.Constant(22)); // using MethodInfo for setter
         
         var constructor = typeof(Person).GetConstructor(Type.EmptyTypes);
-        var newExpr = Expression.New(constructor); // for creting new object
+        var newExpr = Expression.New(constructor!); // for creting new object
 
         var initExpr = Expression.MemberInit(newExpr, nameBind, ageBind);
 
         var personObj = Expression.Lambda<Func<Person>>(initExpr).Compile()();
 
-        Console.WriteLine("${personObj.Name}, ${personObj.Age}");
+        Console.WriteLine($"{personObj.Name}, {personObj.Age}");
     }
 
-    public static void Main(String[] arg)
+    public static void Main1(String[] arg)
     {
         Console.WriteLine(AddExpression(10, 20));
         Console.WriteLine(isTrue(true));
