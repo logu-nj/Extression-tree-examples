@@ -2,7 +2,7 @@ using System.Linq.Expressions;
 
 class Program4
 {
-    static void Main()
+    static void Main76()
     {
         Console.WriteLine("=== Expression.Condition Examples ===\n");
 
