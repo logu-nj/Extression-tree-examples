@@ -5,7 +5,7 @@ namespace ExpressionLambdaExamples
 {
     class Program
     {
-        static void Main()
+        static void Main7()
         {
             Console.WriteLine("=== Expression.Lambda Examples ===\n");
 
